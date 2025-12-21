@@ -21,7 +21,10 @@ const MoviePage = () => {
 
   return (
     <div className="flex h-screen justify-center items-center text-black">
-      {JSON.stringify(movie)}
+      <div className="flex flex-row h-100">
+        <img src={movie?.primaryImage?.url} />
+        <div className="text-3xl ml-2">{movie?.primaryTitle}</div>
+      </div>
     </div>
   );
 };
