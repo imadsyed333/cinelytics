@@ -1,3 +1,4 @@
+"use client";
 import { ImdbapiTitleSearch } from "@/lib/types/imdbapi";
 import Link from "next/link";
 import React from "react";
