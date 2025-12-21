@@ -2,11 +2,10 @@ import {
   imdbapiTitleSchema,
   imdbapiTitlesResponseSchema,
 } from "@/lib/schemas/imdbapi";
-import z from "zod";
 
 export const fetchMovies = async (query: string) => {
   const res = await fetch(
-    `https://api.imdbapi.dev/search/titles?query=${query}`,
+    `https://api.imdbapi.dev/search/titles?query=${query}&limit=5`,
     {
       next: { revalidate: 60 },
     }
@@ -21,8 +20,7 @@ export const fetchMovies = async (query: string) => {
   const parsed = imdbapiTitlesResponseSchema.safeParse(json);
 
   if (!parsed.success) {
-    const errors = z.flattenError(parsed.error).fieldErrors;
-    console.error(errors);
+    console.error(parsed.error);
     throw new Error("Invalid IMDb API response");
   }
 
@@ -41,8 +39,7 @@ export const fetchMovie = async (titleId: string) => {
   const parsed = imdbapiTitleSchema.safeParse(json);
 
   if (!parsed.success) {
-    const errors = z.flattenError(parsed.error).fieldErrors;
-    console.error(errors);
+    console.error(parsed.error);
     throw new Error("Invalid IMDb API response");
   }
 
