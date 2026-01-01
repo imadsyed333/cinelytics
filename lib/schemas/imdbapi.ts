@@ -26,7 +26,7 @@ export const imdbapiTitleSchema = z.object({
   id: z.string(),
   type: z.string(),
   primaryTitle: z.string(),
-  primaryImage: imdbapiImageSchema.nullable(),
+  primaryImage: imdbapiImageSchema.nullable().optional(),
   startYear: z.number().optional(),
   runtimeSeconds: z.number().nullable(),
   genres: z.array(z.string()).optional(),
@@ -40,7 +40,7 @@ export const imdbapiTitleSchema = z.object({
 export const imdbapiTitleSearchSchema = z.object({
   id: z.string(),
   primaryTitle: z.string(),
-  primaryImage: imdbapiImageSchema.nullable(),
+  primaryImage: imdbapiImageSchema.nullable().optional(),
   startYear: z.number().optional(),
 });
 
