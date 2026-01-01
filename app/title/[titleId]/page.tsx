@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchAnalysis } from "@/lib/api/analyzer";
 import { fetchMovie } from "@/lib/api/imdbapi";
 import { ImdbapiTitle } from "@/lib/types/imdbapi";
 import { useParams } from "next/navigation";
