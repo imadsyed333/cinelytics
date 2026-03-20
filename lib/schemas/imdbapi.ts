@@ -44,6 +44,19 @@ export const imdbapiTitleSearchSchema = z.object({
   startYear: z.number().optional(),
 });
 
+/* ---------- Box Office ---------- */
+
+export const imdbapiMonetarySchema = z.object({
+  amount: z.string().optional(),
+  currency: z.string().optional(),
+});
+
+export const imdbapiBoxOfficeResponseSchema = z.object({
+  domesticGross: imdbapiMonetarySchema.nullable().optional(),
+  worldwideGross: imdbapiMonetarySchema.nullable().optional(),
+  productionBudget: imdbapiMonetarySchema.nullable().optional(),
+});
+
 /* ---------- API Response ---------- */
 
 export const imdbapiTitlesResponseSchema = z.object({
