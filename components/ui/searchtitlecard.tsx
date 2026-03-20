@@ -1,16 +1,20 @@
-import { ImdbapiTitleSearch } from "@/lib/types/imdbapi";
+import { TmdbMovieSearchResult } from "@/lib/types/tmdb";
 import Link from "next/link";
 
 type SearchTitleCardProps = {
-  searchTitle: ImdbapiTitleSearch;
+  searchTitle: TmdbMovieSearchResult;
 };
 
 const SearchTitleCard = ({ searchTitle }: SearchTitleCardProps) => {
-  const { primaryTitle, primaryImage, startYear, id } = searchTitle;
+  const { title, poster_path, release_date, id } = searchTitle;
   return (
     <div className="flex border border-gray-300 h-50 w-100 p-2 m-1 rounded-md">
       <img
-        src={primaryImage?.url}
+        src={
+          poster_path
+            ? `https://image.tmdb.org/t/p/w500${poster_path}`
+            : "/placeholder.png"
+        }
         height={"300px"}
         width={"auto"}
         className="mr-2"
@@ -18,9 +22,11 @@ const SearchTitleCard = ({ searchTitle }: SearchTitleCardProps) => {
       <div className="flex flex-col">
         <div className="flex flex-row items-baseline">
           <Link href={`/title/${id}`} className="text-blue-500 text-2xl mr-1">
-            {primaryTitle}
+            {title}
           </Link>
-          <div>({startYear})</div>
+          <div>
+            ({release_date ? new Date(release_date).getFullYear() : "N/A"})
+          </div>
         </div>
       </div>
     </div>
