@@ -13,7 +13,12 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
     movie.revenue,
     movie.release_date,
     movie.overview,
-  );
+  ).catch((error) => {
+    console.error("Error fetching analysis:", error);
+    return {
+      analysis: "Sorry, an error occurred while fetching the analysis.",
+    };
+  });
   return <div className="text-xl mt-4">{analysis}</div>;
 };
 
