@@ -1,21 +1,24 @@
 import { analyzerResponseSchema } from "../schemas/analyzer";
 
-const SERVER_URL = "http://localhost:8000";
-
 export const fetchAnalysis = async (
   title: string,
   budget: number,
-  box_office: number,
-  year: number,
+  revenue: number,
+  release_date: string,
+  overview: string,
 ) => {
-  const res = await fetch(`${SERVER_URL}/analyze`, {
+  const res = await fetch(`${process.env.ANALYZER_URL}/analyze`, {
     method: "POST",
     body: JSON.stringify({
       title,
       budget,
-      box_office,
-      year,
+      revenue,
+      release_date,
+      overview,
     }),
+    headers: {
+      "Content-Type": "application/json",
+    },
     credentials: "include",
   });
   if (!res.ok) {
