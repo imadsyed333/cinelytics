@@ -1,5 +1,7 @@
+import AnalysisView from "@/components/ui/AnalysisView";
 import { fetchMovie } from "@/lib/api/tmdbapi";
 import { TmdbMovie } from "@/lib/types/tmdb";
+import { Suspense } from "react";
 
 const MoviePage = async ({
   params,
@@ -31,10 +33,10 @@ const MoviePage = async ({
             : "No rating available"}
         </div>
         <div className="text-xl mt-4">{movie?.overview}</div>
+        <Suspense fallback={<div className="text-xl mt-4">Thinking...</div>}>
+          <AnalysisView movie={movie} />
+        </Suspense>
       </div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Generate Analysis
-      </button>
     </div>
   );
 };
