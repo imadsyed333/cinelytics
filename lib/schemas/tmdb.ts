@@ -3,10 +3,10 @@ import z from "zod";
 export const tmdbMovieSchema = z.object({
   id: z.number(),
   title: z.string(),
-  release_date: z.string().nullable(),
-  budget: z.number().nullable(),
-  revenue: z.number().nullable(),
-  runtime: z.number().nullable(),
+  release_date: z.string(),
+  budget: z.number(),
+  revenue: z.number(),
+  runtime: z.number(),
   genres: z
     .array(
       z.object({
@@ -15,15 +15,15 @@ export const tmdbMovieSchema = z.object({
       }),
     )
     .optional(),
-  overview: z.string().nullable(),
+  overview: z.string(),
   poster_path: z.string().nullable(),
-  vote_average: z.number().nullable(),
-  vote_count: z.number().nullable(),
+  vote_average: z.number(),
+  vote_count: z.number(),
 });
 
 export const tmdbMovieSearchResultSchema = z.object({
   id: z.number(),
   title: z.string(),
-  release_date: z.string().nullable(),
+  release_date: z.string(),
   poster_path: z.string().nullable(),
 });
