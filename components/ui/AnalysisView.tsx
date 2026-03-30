@@ -19,7 +19,16 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
       analysis: "Sorry, an error occurred while fetching the analysis.",
     };
   });
-  return <div className="text-xl mt-4">{analysis}</div>;
+  return (
+    <section className="mt-4 rounded-2xl border border-border/60 bg-card/70 p-5">
+      <h2 className="text-sm font-semibold tracking-wide text-muted-foreground">
+        Analysis
+      </h2>
+      <p className="mt-3 whitespace-pre-wrap leading-relaxed text-foreground/90">
+        {analysis}
+      </p>
+    </section>
+  );
 };
 
 export default AnalysisView;
