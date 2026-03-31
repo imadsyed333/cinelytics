@@ -4,12 +4,12 @@ export const fetchMovies = async (query: string) => {
   const res = await fetch(
     `${process.env.API_URL}/search/movie?query=${query}&api_key=${process.env.API_KEY}`,
     {
-      next: { revalidate: 60 },
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_KEY}`,
       },
+      cache: "force-cache",
     },
   );
 
@@ -31,12 +31,12 @@ export const fetchMovies = async (query: string) => {
 
 export const fetchMovie = async (id: string) => {
   const res = await fetch(`${process.env.API_URL}/movie/${id}`, {
-    next: { revalidate: 60 },
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.API_KEY}`,
     },
+    cache: "force-cache",
   });
 
   if (!res.ok) {
