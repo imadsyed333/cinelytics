@@ -57,7 +57,7 @@ const MoviePage = async ({
               <Suspense
                 fallback={
                   <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
-                    Analyzing...
+                    Kowalski is thinking...
                   </div>
                 }
               >
