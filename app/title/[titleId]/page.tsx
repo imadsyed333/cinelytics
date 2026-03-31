@@ -21,8 +21,11 @@ const MoviePage = async ({
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <section className="grid gap-6 md:grid-cols-[150px,1fr] md:items-start">
-          <div className="relative overflow-hidden rounded-xl border border-border/60 bg-card/60">
+        <section className="flex gap-6 items-start">
+          <div
+            className="flex-shrink-0 relative overflow-hidden rounded-lg border border-border/60 bg-card/60"
+            style={{ width: "200px" }}
+          >
             <div className="aspect-[2/3] w-full">
               <Image
                 src={
@@ -38,7 +41,7 @@ const MoviePage = async ({
             </div>
           </div>
 
-          <div>
+          <div className="flex-1">
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
               {movie?.title}
             </h1>
