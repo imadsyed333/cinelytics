@@ -2,6 +2,7 @@ import AnalysisView from "@/components/ui/AnalysisView";
 import { fetchMovie } from "@/lib/api/tmdbapi";
 import { TmdbMovie } from "@/lib/types/tmdb";
 import { Suspense } from "react";
+import Image from "next/image";
 
 const MoviePage = async ({
   params,
@@ -16,21 +17,21 @@ const MoviePage = async ({
     <div className="min-h-screen bg-background text-foreground">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_rgba(6,53,108,0.35),_transparent_60%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_rgba(59,130,246,0.3),_transparent_60%)]"
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <section className="grid gap-8 md:grid-cols-[280px,1fr] md:items-start">
-          <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/60">
+        <section className="grid gap-6 md:grid-cols-[150px,1fr] md:items-start">
+          <div className="relative overflow-hidden rounded-xl border border-border/60 bg-card/60">
             <div className="aspect-[2/3] w-full">
-              <img
+              <Image
                 src={
                   movie.poster_path
                     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                     : "/placeholder.png"
                 }
-                height={"300px"}
-                width={"auto"}
+                height={225}
+                width={150}
                 className="h-full w-full object-cover"
                 alt={movie?.title || "Image not found"}
               />
