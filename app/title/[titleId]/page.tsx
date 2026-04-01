@@ -3,6 +3,7 @@ import { fetchMovie } from "@/lib/api/tmdbapi";
 import { TmdbMovie } from "@/lib/types/tmdb";
 import { Suspense } from "react";
 import Image from "next/image";
+import { Banknote, CalendarDays, Star, TrendingUp, Users } from "lucide-react";
 
 const MoviePage = async ({
   params,
@@ -46,15 +47,98 @@ const MoviePage = async ({
               {movie?.title}
             </h1>
 
-            <div className="mt-4 rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground ring-1 ring-border/60">
-              {movie?.vote_average
-                ? `Rating: ${movie.vote_average} (${movie.vote_count} votes)`
-                : "No rating available"}
-            </div>
-
             <p className="mt-4 max-w-2xl text-muted-foreground leading-relaxed">
               {movie?.overview}
             </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-3">
+                <div className="rounded-lg bg-amber-500/10 p-2">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Rating</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-3">
+                <div className="rounded-lg bg-primary/10 p-2">
+                  <Users className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Votes</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {movie.vote_count
+                      ? Intl.NumberFormat("en-US", {
+                          notation: "compact",
+                        }).format(movie.vote_count)
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-3">
+                <div className="rounded-lg bg-primary/10 p-2">
+                  <CalendarDays className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Release Date</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {movie.release_date
+                      ? new Date(movie.release_date).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
+                      : "Unknown"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-3">
+                <div className="rounded-lg bg-primary/10 p-2">
+                  <Banknote className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Budget</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {movie.budget
+                      ? Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          notation: "compact",
+                          maximumFractionDigits: 1,
+                        }).format(movie.budget)
+                      : "Unreported"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-3">
+                <div className="rounded-lg bg-primary/10 p-2">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Revenue</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {movie.revenue
+                      ? Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          notation: "compact",
+                          maximumFractionDigits: 1,
+                        }).format(movie.revenue)
+                      : "Unreported"}
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <div className="mt-7">
               <Suspense
