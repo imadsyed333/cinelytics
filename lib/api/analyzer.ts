@@ -1,25 +1,13 @@
 import { analyzerResponseSchema } from "../schemas/analyzer";
 
-export const fetchAnalysis = async (
-  title: string,
-  budget: number,
-  revenue: number,
-  release_date: string,
-  overview: string,
-) => {
-  const res = await fetch(`${process.env.ANALYZER_URL}/analyze`, {
-    method: "POST",
-    body: JSON.stringify({
-      title,
-      budget,
-      revenue,
-      release_date,
-      overview,
-    }),
+export const fetchAnalysis = async (movieId: number) => {
+  const res = await fetch(`${process.env.ANALYZER_URL}/analyze/${movieId}`, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
+    cache: "force-cache",
   });
   if (!res.ok) {
     throw new Error(`Analyzer error: ${res.status}`);
