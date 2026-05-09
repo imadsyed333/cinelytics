@@ -1,13 +1,14 @@
 import { analyzerResponseSchema } from "../schemas/analyzer";
+import { AnalyzerResponse } from "../types/analyzer";
 
-export const fetchAnalysis = async (movieId: number) => {
+export const fetchAnalysis = async (movieId: number): Promise<AnalyzerResponse> => {
   const res = await fetch(`${process.env.ANALYZER_URL}/analyze/${movieId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    cache: "force-cache",
+    // cache: "force-cache",
   });
   if (!res.ok) {
     throw new Error(`Analyzer error: ${res.status}`);
