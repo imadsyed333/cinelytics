@@ -6,12 +6,18 @@ type AnalysisViewProps = {
 };
 
 const normalizeText = (value: string) =>
-  value.replace(/\r\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  value
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 
 const splitParagraphs = (value: string) => {
   const normalized = normalizeText(value);
   if (!normalized) return [];
-  return normalized.split(/\n{2,}/).map((part) => part.trim()).filter(Boolean);
+  return normalized
+    .split(/\n{2,}/)
+    .map((part) => part.trim())
+    .filter(Boolean);
 };
 
 const renderParagraphs = (value: string, className = "") => {
@@ -48,12 +54,9 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
     };
   });
   return (
-    <section className="mt-4 rounded-2xl border border-border/60 bg-card/70 p-5">
-      <h2 className="text-sm font-semibold tracking-wide text-muted-foreground">
-        Analysis
-      </h2>
-      <div className="mt-4 space-y-6">
-        <div className="space-y-3 rounded-xl border border-border/50 bg-background/40 p-4">
+    <section className="rounded-2xl border border-border/60 bg-card/70 p-5">
+      <div className="divide-y divide-border/50">
+        <div className="space-y-3 pb-5">
           <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
             Performance Summary
           </h3>
@@ -65,7 +68,7 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
         </div>
 
         {reasons.length > 0 && (
-          <div className="space-y-3 rounded-xl border border-border/50 bg-background/40 p-4">
+          <div className="space-y-3 py-5">
             <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
               Reasons
             </h3>
@@ -74,7 +77,9 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
                 const cleanedReason = cleanReason(reason);
                 return (
                   <li key={`${cleanedReason.slice(0, 24)}-${index}`}>
-                    <div className="space-y-2">{renderParagraphs(cleanedReason)}</div>
+                    <div className="space-y-2">
+                      {renderParagraphs(cleanedReason)}
+                    </div>
                   </li>
                 );
               })}
@@ -83,7 +88,7 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
         )}
 
         {normalizeText(final_thoughts) && (
-          <div className="space-y-3 rounded-xl border border-border/50 bg-background/40 p-4">
+          <div className="space-y-3 pt-5">
             <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
               Final Thoughts
             </h3>
