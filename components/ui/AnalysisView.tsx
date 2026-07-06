@@ -43,7 +43,7 @@ const cleanReason = (reason: string) =>
 
 const AnalysisView = async ({ movie }: AnalysisViewProps) => {
   const { performance_summary, reasons, final_thoughts } = await fetchAnalysis(
-    movie.id,
+    movie,
   ).catch((err) => {
     console.error("Failed to fetch analysis:", err);
     return {

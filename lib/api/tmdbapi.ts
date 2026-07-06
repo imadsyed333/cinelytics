@@ -1,4 +1,9 @@
-import { tmdbMovieSchema, tmdbMovieSearchResultSchema } from "../schemas/tmdb";
+import {
+  tmdbMovieSchema,
+  tmdbMovieSearchResultSchema,
+  tmdbMovieReviewSchema,
+} from "../schemas/tmdb";
+import { TmdbMovieReview } from "../types/tmdb";
 
 export const fetchMovies = async (query: string) => {
   const res = await fetch(
@@ -53,4 +58,29 @@ export const fetchMovie = async (id: string) => {
   }
 
   return parsed.data;
+};
+
+export const fetchReviews = async (
+  movieId: number,
+): Promise<TmdbMovieReview[]> => {
+  const res = await fetch(`${process.env.API_URL}/movie/${movieId}/reviews`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.API_KEY}`,
+    },
+    cache: "force-cache",
+  });
+
+  if (!res.ok) {
+    throw new Error(`TMDB API error: ${res.status}`);
+  }
+
+  const json = await res.json();
+  const results: unknown[] = json.results ?? [];
+
+  return results
+    .map((item) => tmdbMovieReviewSchema.safeParse(item))
+    .filter((r) => r.success)
+    .map((r) => r.data);
 };

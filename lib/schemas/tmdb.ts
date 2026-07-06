@@ -27,3 +27,9 @@ export const tmdbMovieSearchResultSchema = z.object({
   release_date: z.string(),
   poster_path: z.string().nullable(),
 });
+
+export const tmdbMovieReviewSchema = z.object({
+  id: z.string(),
+  author: z.string(),
+  content: z.string(),
+});
