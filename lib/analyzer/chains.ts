@@ -12,7 +12,7 @@ export async function runReviewChain(reviewsStr: string): Promise<string> {
     options: { temperature: 0 },
   });
 
-  return response.message.content.trim();
+  return response.message.content;
 }
 
 export async function runAnalysisChain(params: {
@@ -47,14 +47,15 @@ export async function runAnalysisChain(params: {
     `Schema: ${JSON.stringify(jsonSchema)}`;
 
   const response = await ollama.chat({
-    model: "qwen3.5:4b",
+    model: "qwen3.5:2b",
     think: false,
     messages: [{ role: "user", content: userPrompt }],
     format: jsonSchema,
     options: { temperature: 0 },
   });
 
-  const raw = response.message.content.trim();
+  const raw = response.message.content;
+  console.log(raw);
   const parsed = JSON.parse(raw);
 
   return analyzerResponseSchema.parse(parsed);
