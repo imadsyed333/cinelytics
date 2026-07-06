@@ -1,26 +1,31 @@
-import { analyzerResponseSchema } from "../schemas/analyzer";
 import { AnalyzerResponse } from "../types/analyzer";
+import { TmdbMovie } from "../types/tmdb";
+import { fetchReviews } from "./tmdbapi";
+import { runReviewChain, runAnalysisChain } from "../analyzer/chains";
+import {
+  stringifyReviews,
+  describePerformance,
+  systemPrompt,
+} from "../analyzer/utils";
 
-export const fetchAnalysis = async (movieId: number): Promise<AnalyzerResponse> => {
-  const res = await fetch(`${process.env.ANALYZER_URL}/analyze/${movieId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    // cache: "force-cache",
+export const fetchAnalysis = async (
+  movie: TmdbMovie,
+): Promise<AnalyzerResponse> => {
+  const reviews = await fetchReviews(movie.id);
+  const reviewsStr = stringifyReviews(reviews);
+  const performance = describePerformance(movie.revenue, movie.budget);
+
+  const sentiment = await runReviewChain(reviewsStr);
+
+  return runAnalysisChain({
+    systemPrompt,
+    title: movie.title,
+    release_date: movie.release_date,
+    budget: movie.budget,
+    revenue: movie.revenue,
+    rating: movie.vote_average,
+    overview: movie.overview,
+    performance,
+    sentiment,
   });
-  if (!res.ok) {
-    throw new Error(`Analyzer error: ${res.status}`);
-  }
-  const json = await res.json();
-
-  const parsed = analyzerResponseSchema.safeParse(json);
-
-  if (!parsed.success) {
-    console.error(parsed.error);
-    throw new Error("Invalid analyzer response");
-  }
-
-  return parsed.data;
 };
