@@ -3,8 +3,6 @@
 Cinelytics is a movie intelligence app that combines TMDB data with an AI analyst named Kowalski.
 Instead of only showing raw movie stats, it helps users quickly understand how a title performed and why.
 
-Code for the AI-powered backend service can be found [here](https://github.com/imadsyed333/cinelytics-server).
-
 ## What the App Does
 
 - Search movies by title.
@@ -24,6 +22,7 @@ Code for the AI-powered backend service can be found [here](https://github.com/i
 - React 19 + TypeScript
 - Tailwind CSS v4
 - Zod for API response validation
+- Ollama for local LLM inference (Qwen models)
 
 ## Architecture Overview
 
@@ -35,8 +34,11 @@ Code for the AI-powered backend service can be found [here](https://github.com/i
   - UI primitives and movie-specific UI components.
   - `AnalysisView.tsx`: Displays Kowalski's response.
 - `lib/api/`
-  - `tmdbapi.ts`: TMDB requests for search and single-movie fetch.
-  - `analyzer.ts`: Requests analysis from external analyzer service.
+  - `tmdbapi.ts`: TMDB requests for search, single-movie fetch, and reviews.
+  - `analyzer.ts`: Orchestrates the full analysis pipeline (fetches reviews, runs LLM chains).
+- `lib/analyzer/`
+  - `chains.ts`: Ollama LLM chains — review sentiment summarization and structured box office analysis.
+  - `utils.ts`: Helpers for review stringification, performance classification, and the system prompt.
 - `lib/schemas/`
   - Zod schemas used to validate API responses.
 
@@ -47,14 +49,14 @@ Create a `.env.local` file in the project root:
 ```env
 API_URL=https://api.themoviedb.org/3
 API_KEY=your_tmdb_api_key_or_bearer_token
-ANALYZER_URL=http://localhost:8000
 ```
 
 Notes:
 
 - `API_URL` should point to the TMDB base URL.
-- `API_KEY` is used when calling TMDB endpoints.
-- `ANALYZER_URL` should point to the service that exposes `GET /analyze/:movieId`.
+- `API_KEY` is used as the Bearer token when calling TMDB endpoints.
+
+Analysis is performed locally via Ollama. Ensure Ollama is running and the `qwen3.5:0.8b` and `qwen3.5:2b` models are pulled before starting the app.
 
 ## Getting Started
 
