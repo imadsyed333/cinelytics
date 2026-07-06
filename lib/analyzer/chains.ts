@@ -55,7 +55,6 @@ export async function runAnalysisChain(params: {
   });
 
   const raw = response.message.content;
-  console.log(raw);
   const parsed = JSON.parse(raw);
 
   return analyzerResponseSchema.parse(parsed);
