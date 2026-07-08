@@ -16,7 +16,7 @@ const SearchTitleCard = ({ searchTitle }: SearchTitleCardProps) => {
             src={
               poster_path
                 ? `https://image.tmdb.org/t/p/w500${poster_path}`
-                : "/placeholder.png"
+                : "https://community.flowlab.io/uploads/default/original/3X/7/1/71d132125a96d98283289be7ddef4fff4baa6d14.jpeg"
             }
             alt={title}
             height={180}
