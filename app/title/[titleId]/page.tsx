@@ -1,4 +1,5 @@
 import AnalysisView from "@/components/ui/AnalysisView";
+import BackButton from "@/components/ui/back-button";
 import { fetchMovie } from "@/lib/api/tmdbapi";
 import { TmdbMovie } from "@/lib/types/tmdb";
 import { Suspense } from "react";
@@ -22,6 +23,13 @@ const MoviePage = async ({
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="mb-7 flex items-center gap-4">
+          <BackButton />
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            {movie?.title}
+          </h1>
+        </div>
+
         <section className="flex gap-6 items-start">
           <div
             className="flex-shrink-0 relative overflow-hidden rounded-lg border border-border/60 bg-card/60"
@@ -43,11 +51,7 @@ const MoviePage = async ({
           </div>
 
           <div className="flex-1">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              {movie?.title}
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-muted-foreground leading-relaxed">
+            <p className="max-w-2xl text-muted-foreground leading-relaxed">
               {movie?.overview}
             </p>
 

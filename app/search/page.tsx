@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import SearchTitleCard from "@/components/ui/searchtitlecard";
 import { fetchMovies } from "@/lib/api/tmdbapi";
+import BackButton from "@/components/ui/back-button";
 
 const SearchResultsPage = async ({
   searchParams,
@@ -16,12 +17,7 @@ const SearchResultsPage = async ({
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="mb-7">
           <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft size={32} strokeWidth={1.5} />
-            </Link>
+            <BackButton />
             <div>
               <h1 className="text-2xl font-bold tracking-tight">
                 Search results
