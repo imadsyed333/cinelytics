@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/t/p/w500/**",
       },
+      {
+        protocol: "https",
+        hostname: "community.flowlab.io",
+      },
     ],
   },
 };

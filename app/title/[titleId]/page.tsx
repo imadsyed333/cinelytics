@@ -1,4 +1,5 @@
 import AnalysisView from "@/components/ui/AnalysisView";
+import BackButton from "@/components/ui/back-button";
 import { fetchMovie } from "@/lib/api/tmdbapi";
 import { TmdbMovie } from "@/lib/types/tmdb";
 import { Suspense } from "react";
@@ -22,6 +23,13 @@ const MoviePage = async ({
       />
 
       <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="mb-7 flex items-center gap-4">
+          <BackButton />
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            {movie?.title}
+          </h1>
+        </div>
+
         <section className="flex gap-6 items-start">
           <div
             className="flex-shrink-0 relative overflow-hidden rounded-lg border border-border/60 bg-card/60"
@@ -32,7 +40,7 @@ const MoviePage = async ({
                 src={
                   movie.poster_path
                     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : "/placeholder.png"
+                    : "https://community.flowlab.io/uploads/default/original/3X/7/1/71d132125a96d98283289be7ddef4fff4baa6d14.jpeg"
                 }
                 height={225}
                 width={150}
@@ -43,11 +51,7 @@ const MoviePage = async ({
           </div>
 
           <div className="flex-1">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              {movie?.title}
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-muted-foreground leading-relaxed">
+            <p className="max-w-2xl text-muted-foreground leading-relaxed">
               {movie?.overview}
             </p>
 
@@ -141,15 +145,22 @@ const MoviePage = async ({
             </div>
 
             <div className="mt-7">
-              <Suspense
-                fallback={
-                  <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
-                    Kowalski is thinking...
-                  </div>
-                }
-              >
-                <AnalysisView movie={movie} />
-              </Suspense>
+              {movie.revenue && movie.budget ? (
+                <Suspense
+                  fallback={
+                    <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
+                      Kowalski is thinking...
+                    </div>
+                  }
+                >
+                  <AnalysisView movie={movie} />
+                </Suspense>
+              ) : (
+                <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
+                  Kowalski cannot analysis because budget and/or revenue not
+                  available :(
+                </div>
+              )}
             </div>
           </div>
         </section>
