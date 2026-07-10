@@ -43,11 +43,15 @@ export async function runAnalysisChain(params: {
     `Here's a brief overview of the movie: ${params.overview}\n\n` +
     `${params.sentiment}\n\n` +
     `Based on this information, provide specific reasons to explain why the movie ${params.performance} at the box office.\n\n` +
-    `Return ONLY valid JSON matching this schema. Do not return markdown, numbering, or extra text.\n` +
-    `Schema: ${JSON.stringify(jsonSchema)}`;
+    `Return ONLY a valid JSON object with exactly these three top-level keys:\n` +
+    `- "performance_summary": a single string\n` +
+    `- "reasons": an array of plain strings only (do NOT put key:value pairs inside the array)\n` +
+    `- "final_thoughts": a single string at the TOP LEVEL, NOT inside the reasons array\n\n` +
+    `Correct example: {"performance_summary": "...", "reasons": ["string1", "string2"], "final_thoughts": "..."}\n` +
+    `Do not return markdown, numbering, or extra text.\n`;
 
   const response = await ollama.chat({
-    model: "qwen3.5:2b",
+    model: "qwen3.5:4b",
     think: false,
     messages: [{ role: "user", content: userPrompt }],
     format: jsonSchema,
@@ -55,7 +59,7 @@ export async function runAnalysisChain(params: {
   });
 
   const raw = response.message.content;
-  const parsed = JSON.parse(raw);
 
+  const parsed = JSON.parse(raw);
   return analyzerResponseSchema.parse(parsed);
 }
