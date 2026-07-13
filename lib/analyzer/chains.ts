@@ -9,7 +9,7 @@ export async function runReviewChain(reviewsStr: string): Promise<string> {
     model: "qwen3.5:0.8b",
     think: false,
     messages: [{ role: "user", content: prompt }],
-    options: { temperature: 0 },
+    options: { temperature: 0, f16_kv: true },
   });
 
   return response.message.content;
@@ -55,9 +55,8 @@ export async function runAnalysisChain(params: {
     think: false,
     messages: [{ role: "user", content: userPrompt }],
     format: jsonSchema,
-    options: { temperature: 0 },
+    options: { temperature: 0, f16_kv: true },
   });
-
   const raw = response.message.content;
 
   const parsed = JSON.parse(raw);
