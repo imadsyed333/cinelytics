@@ -51,7 +51,7 @@ export async function runAnalysisChain(params: {
     `Do not return markdown, numbering, or extra text.\n`;
 
   const response = await ollama.chat({
-    model: "qwen3.5:4b",
+    model: "qwen3.5:2b",
     think: false,
     messages: [{ role: "user", content: userPrompt }],
     format: jsonSchema,
