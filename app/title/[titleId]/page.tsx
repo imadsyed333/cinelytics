@@ -145,20 +145,6 @@ const MoviePage = async ({
               </div>
             </div>
 
-            {movie.imdb_id ? (
-              <div className="mt-7">
-                <Suspense
-                  fallback={
-                    <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
-                      Loading regional revenue...
-                    </div>
-                  }
-                >
-                  <RegionalRevenueView imdbId={movie.imdb_id} />
-                </Suspense>
-              </div>
-            ) : null}
-
             <div className="mt-7">
               {movie.revenue && movie.budget ? (
                 <Suspense
@@ -177,6 +163,19 @@ const MoviePage = async ({
                 </div>
               )}
             </div>
+            {movie.imdb_id ? (
+              <div className="mt-7">
+                <Suspense
+                  fallback={
+                    <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
+                      Loading regional revenue...
+                    </div>
+                  }
+                >
+                  <RegionalRevenueView imdbId={movie.imdb_id} />
+                </Suspense>
+              </div>
+            ) : null}
           </div>
         </section>
       </div>
