@@ -2,6 +2,7 @@ import z from "zod";
 
 export const tmdbMovieSchema = z.object({
   id: z.number(),
+  imdb_id: z.string(),
   title: z.string(),
   release_date: z.string(),
   budget: z.number(),
