@@ -6,10 +6,10 @@ export async function runReviewChain(reviewsStr: string): Promise<string> {
   const prompt = `Here are some reviews for a movie:\n${reviewsStr}\nI want you to provide me with a concise paragraph summarizing the overall sentiment and key points mentioned in these reviews.`;
 
   const response = await ollama.chat({
-    model: "qwen3.5:0.8b",
+    model: "gemma4:e2b",
     think: false,
     messages: [{ role: "user", content: prompt }],
-    options: { temperature: 0 },
+    options: { temperature: 0, f16_kv: true },
   });
 
   return response.message.content;
@@ -51,13 +51,12 @@ export async function runAnalysisChain(params: {
     `Do not return markdown, numbering, or extra text.\n`;
 
   const response = await ollama.chat({
-    model: "qwen3.5:4b",
+    model: "gemma4:e2b",
     think: false,
     messages: [{ role: "user", content: userPrompt }],
     format: jsonSchema,
-    options: { temperature: 0 },
+    options: { temperature: 0, f16_kv: true },
   });
-
   const raw = response.message.content;
 
   const parsed = JSON.parse(raw);
