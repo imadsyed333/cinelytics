@@ -1,5 +1,6 @@
 import AnalysisView from "@/components/ui/AnalysisView";
 import BackButton from "@/components/ui/back-button";
+import RegionalRevenueView from "@/components/ui/RegionalRevenueView";
 import { fetchMovie } from "@/lib/api/tmdbapi";
 import { TmdbMovie } from "@/lib/types/tmdb";
 import { Suspense } from "react";
@@ -143,6 +144,20 @@ const MoviePage = async ({
                 </div>
               </div>
             </div>
+
+            {movie.imdb_id ? (
+              <div className="mt-7">
+                <Suspense
+                  fallback={
+                    <div className="rounded-2xl border border-border/60 bg-card/60 p-5 text-sm text-muted-foreground">
+                      Loading regional revenue...
+                    </div>
+                  }
+                >
+                  <RegionalRevenueView imdbId={movie.imdb_id} />
+                </Suspense>
+              </div>
+            ) : null}
 
             <div className="mt-7">
               {movie.revenue && movie.budget ? (
