@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -83,18 +83,29 @@ const readThemeMapColors = (): MapColors => {
   };
 };
 
+type TooltipState = {
+  x: number;
+  y: number;
+  label: string;
+  revenue: number | null;
+};
+
 const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
   const [colors, setColors] = useState<MapColors>(FALLBACK_COLORS);
-  const [tooltip, setTooltip] = useState<{
-    x: number;
-    y: number;
-    label: string;
-    revenue: number | null;
-  } | null>(null);
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const pointerMode = useRef<"mouse" | "touch">("mouse");
 
   useEffect(() => {
     setColors(readThemeMapColors());
   }, []);
+
+  useEffect(() => {
+    if (!tooltip || pointerMode.current !== "touch") return;
+
+    const dismiss = () => setTooltip(null);
+    document.addEventListener("touchstart", dismiss);
+    return () => document.removeEventListener("touchstart", dismiss);
+  }, [tooltip]);
 
   const byIso = useMemo(() => {
     const map = new Map<string, TerritoryValue>();
@@ -122,17 +133,27 @@ const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
     [colors.low, colors.high],
   );
 
+  const showTooltip = (
+    x: number,
+    y: number,
+    label: string,
+    revenue: number | null,
+  ) => {
+    setTooltip({ x, y, label, revenue });
+  };
+
   return (
-    <div className="relative">
-      <ComposableMap
-        projectionConfig={{ scale: 147 }}
-        width={800}
-        height={420}
-        className="h-auto w-full"
-      >
-        <Geographies geography={geography}>
-          {({ geographies }) =>
-            geographies.map((geo, index) => {
+    <div className="relative flex h-full min-h-0 flex-col">
+      <div className="min-h-0 flex-1 max-h-56 sm:max-h-72 lg:max-h-none">
+        <ComposableMap
+          projectionConfig={{ scale: 147 }}
+          width={800}
+          height={420}
+          className="h-full w-full"
+        >
+          <Geographies geography={geography}>
+            {({ geographies }) =>
+              geographies.map((geo, index) => {
               const id = geoId(geo);
               const value = byIso.get(id);
               const fill = value ? colorScale(value.revenue) : colors.empty;
@@ -145,6 +166,8 @@ const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
                 typeof geo.properties?.name === "string"
                   ? geo.properties.name
                   : key;
+              const label = value?.label ?? countryName;
+              const revenue = value?.revenue ?? null;
 
               return (
                 <Geography
@@ -162,22 +185,33 @@ const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
                     pressed: { fill, outline: "none" },
                   }}
                   onMouseEnter={(event) => {
-                    setTooltip({
-                      x: event.clientX,
-                      y: event.clientY,
-                      label: value?.label ?? countryName,
-                      revenue: value?.revenue ?? null,
-                    });
+                    if (pointerMode.current === "touch") return;
+                    showTooltip(event.clientX, event.clientY, label, revenue);
                   }}
-                  onMouseLeave={() => setTooltip(null)}
+                  onMouseLeave={() => {
+                    if (pointerMode.current === "touch") return;
+                    setTooltip(null);
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    showTooltip(event.clientX, event.clientY, label, revenue);
+                  }}
+                  onTouchStart={(event) => {
+                    pointerMode.current = "touch";
+                    event.stopPropagation();
+                    const touch = event.touches[0];
+                    if (!touch) return;
+                    showTooltip(touch.clientX, touch.clientY, label, revenue);
+                  }}
                 />
               );
             })
           }
         </Geographies>
       </ComposableMap>
+      </div>
 
-      <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+      <div className="mt-2 flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
         <span>{formatRevenue(SCALE_MIN)}</span>
         <div
           className="h-2 flex-1 rounded-full"

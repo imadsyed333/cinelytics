@@ -44,8 +44,14 @@ const generateAnalysis = async (
   });
 };
 
-export const fetchAnalysis = unstable_cache(
-  generateAnalysis,
-  ["analysis"],
-  { revalidate: false, tags: ["analysis"] },
-);
+export const fetchAnalysis = (
+  movie: TmdbMovie,
+): Promise<AnalyzerResponse> =>
+  unstable_cache(
+    () => generateAnalysis(movie),
+    ["analysis", String(movie.id)],
+    {
+      revalidate: false,
+      tags: ["analysis", `analysis-${movie.id}`],
+    },
+  )();
