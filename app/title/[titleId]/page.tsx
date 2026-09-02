@@ -91,7 +91,7 @@ const MoviePage = async ({
             movie.imdb_id && "lg:grid-cols-2",
           )}
         >
-          <div className="lg:min-h-0 lg:overflow-y-auto">
+          <div className="order-2 lg:order-none lg:min-h-0 lg:overflow-y-auto">
             {movie.revenue && movie.budget ? (
               <Suspense
                 fallback={
@@ -111,7 +111,7 @@ const MoviePage = async ({
           </div>
 
           {movie.imdb_id ? (
-            <div className="lg:min-h-0 lg:overflow-hidden">
+            <div className="order-1 lg:order-none lg:min-h-0 lg:overflow-hidden">
               <Suspense
                 fallback={
                   <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
