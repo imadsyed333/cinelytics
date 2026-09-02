@@ -19,7 +19,7 @@ export async function runReviewChain(reviewsStr: string): Promise<string> {
     temperature: 0,
   });
 
-  return response.choices[0].message.content?.trim() || "";
+  return response.choices[0]?.message.content?.trim() || "";
 }
 
 export async function runAnalysisChain(params: {
@@ -82,8 +82,17 @@ export async function runAnalysisChain(params: {
     },
   });
 
-  const raw = response.choices[0].message.content?.trim() || "";
+  const raw = response.choices[0]?.message.content?.trim();
+  if (!raw) {
+    throw new Error("Analyzer returned an empty response");
+  }
 
-  const parsed = JSON.parse(raw);
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new Error("Analyzer returned invalid JSON");
+  }
+
   return analyzerResponseSchema.parse(parsed);
 }

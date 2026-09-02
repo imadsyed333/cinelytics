@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { AnalyzerResponse } from "../types/analyzer";
 import { BomRegionalRevenue } from "../types/bom";
 import { TmdbMovie } from "../types/tmdb";
@@ -11,7 +12,7 @@ import {
   systemPrompt,
 } from "../analyzer/utils";
 
-export const fetchAnalysis = async (
+const generateAnalysis = async (
   movie: TmdbMovie,
 ): Promise<AnalyzerResponse> => {
   const [reviews, regionalRows] = await Promise.all([
@@ -42,3 +43,9 @@ export const fetchAnalysis = async (
     regionalRevenue,
   });
 };
+
+export const fetchAnalysis = unstable_cache(
+  generateAnalysis,
+  ["analysis"],
+  { revalidate: false, tags: ["analysis"] },
+);
