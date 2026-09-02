@@ -1,9 +1,12 @@
 import { AnalyzerResponse } from "../types/analyzer";
+import { BomRegionalRevenue } from "../types/bom";
 import { TmdbMovie } from "../types/tmdb";
 import { fetchReviews } from "./tmdbapi";
+import { fetchRegionalRevenue } from "./bom";
 import { runReviewChain, runAnalysisChain } from "../analyzer/chains";
 import {
   stringifyReviews,
+  stringifyRegionalRevenue,
   describePerformance,
   systemPrompt,
 } from "../analyzer/utils";
@@ -11,8 +14,17 @@ import {
 export const fetchAnalysis = async (
   movie: TmdbMovie,
 ): Promise<AnalyzerResponse> => {
-  const reviews = await fetchReviews(movie.id);
+  const [reviews, regionalRows] = await Promise.all([
+    fetchReviews(movie.id),
+    movie.imdb_id
+      ? fetchRegionalRevenue(movie.imdb_id).catch((err) => {
+          console.error("Failed to fetch regional revenue for analysis:", err);
+          return [] as BomRegionalRevenue[];
+        })
+      : Promise.resolve([] as BomRegionalRevenue[]),
+  ]);
   const reviewsStr = stringifyReviews(reviews);
+  const regionalRevenue = stringifyRegionalRevenue(regionalRows);
   const performance = describePerformance(movie.revenue, movie.budget);
 
   const sentiment = await runReviewChain(reviewsStr);
@@ -27,5 +39,6 @@ export const fetchAnalysis = async (
     overview: movie.overview,
     performance,
     sentiment,
+    regionalRevenue,
   });
 };
