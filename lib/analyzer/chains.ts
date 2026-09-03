@@ -1,7 +1,7 @@
 import ollama from "ollama";
-import { analyzerResponseSchema } from "../schemas/analyzer";
-import { AnalyzerResponse } from "../types/analyzer";
-import { hf } from "../hf";
+import { analyzerResponseSchema } from "./schemas";
+import { AnalyzerResponse } from "./types";
+import { hf } from "./hf";
 
 export async function runReviewChain(reviewsStr: string): Promise<string> {
   const prompt = `Here are some reviews for a movie:\n${reviewsStr}\nI want you to provide me with a concise paragraph summarizing the overall sentiment and key points mentioned in these reviews.`;

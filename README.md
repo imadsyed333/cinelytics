@@ -33,14 +33,18 @@ Instead of only showing raw movie stats, it helps users quickly understand how a
 - `components/ui/`
   - UI primitives and movie-specific UI components.
   - `AnalysisView.tsx`: Displays Kowalski's response.
-- `lib/api/`
-  - `tmdbapi.ts`: TMDB requests for search, single-movie fetch, and reviews.
-  - `analyzer.ts`: Orchestrates the full analysis pipeline (fetches reviews, runs LLM chains).
+- `lib/tmdb/`
+  - `api.ts`: TMDB requests for search, single-movie fetch, and reviews.
+  - `schemas.ts` / `types.ts`: Zod schemas and inferred TMDB types.
+- `lib/bom/`
+  - `api.ts`: Box Office Mojo scraping for regional revenue.
+  - `schemas.ts` / `types.ts`: Zod schemas and inferred BOM types.
+  - `countryIso.ts`: Maps BOM territory labels to ISO country codes.
 - `lib/analyzer/`
-  - `chains.ts`: Ollama LLM chains — review sentiment summarization and structured box office analysis.
+  - `api.ts`: Orchestrates the full analysis pipeline (fetches reviews, runs LLM chains).
+  - `chains.ts`: LLM chains — review sentiment summarization and structured box office analysis.
   - `utils.ts`: Helpers for review stringification, performance classification, and the system prompt.
-- `lib/schemas/`
-  - Zod schemas used to validate API responses.
+  - `schemas.ts` / `types.ts`: Zod schemas and inferred analyzer types.
 
 ## Environment Variables
 

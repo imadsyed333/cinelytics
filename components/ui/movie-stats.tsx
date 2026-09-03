@@ -1,4 +1,4 @@
-import { TmdbMovie } from "@/lib/types/tmdb";
+import { TmdbMovie } from "@/lib/tmdb/types";
 import { Banknote, CalendarDays, Star, TrendingUp, Users } from "lucide-react";
 import { ReactNode } from "react";
 

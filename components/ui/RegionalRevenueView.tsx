@@ -1,6 +1,6 @@
 import RegionalRevenueMap from "@/components/ui/RegionalRevenueMap";
-import { fetchRegionalRevenue } from "@/lib/api/bom";
-import { BomRegionalRevenue } from "@/lib/types/bom";
+import { fetchRegionalRevenue } from "@/lib/bom/api";
+import { BomRegionalRevenue } from "@/lib/bom/types";
 
 type RegionalRevenueViewProps = {
   imdbId: string;

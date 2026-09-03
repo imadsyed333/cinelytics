@@ -1,8 +1,8 @@
 import SearchBox from "@/components/ui/searchbox";
 import PageBackground from "@/components/ui/page-background";
 import PosterMosaic from "@/components/ui/poster-mosaic";
-import { fetchTrendingMovies } from "@/lib/api/tmdbapi";
-import { TmdbMovieSearchResult } from "@/lib/types/tmdb";
+import { fetchTrendingMovies } from "@/lib/tmdb/api";
+import { TmdbMovieSearchResult } from "@/lib/tmdb/types";
 
 export default async function Home() {
   let trending: TmdbMovieSearchResult[] = [];

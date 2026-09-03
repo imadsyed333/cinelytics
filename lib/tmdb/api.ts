@@ -2,8 +2,8 @@ import {
   tmdbMovieSchema,
   tmdbMovieSearchResultSchema,
   tmdbMovieReviewSchema,
-} from "../schemas/tmdb";
-import { TmdbMovieReview } from "../types/tmdb";
+} from "./schemas";
+import { TmdbMovieReview } from "./types";
 
 export const fetchMovies = async (query: string) => {
   const res = await fetch(

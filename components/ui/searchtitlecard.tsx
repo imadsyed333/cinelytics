@@ -1,4 +1,4 @@
-import { TmdbMovieSearchResult } from "@/lib/types/tmdb";
+import { TmdbMovieSearchResult } from "@/lib/tmdb/types";
 import Link from "next/link";
 import Image from "next/image";
 import { Star } from "lucide-react";

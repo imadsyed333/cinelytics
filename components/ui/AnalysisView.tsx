@@ -1,5 +1,5 @@
-import { fetchAnalysis } from "@/lib/api/analyzer";
-import { TmdbMovie } from "@/lib/types/tmdb";
+import { fetchAnalysis } from "@/lib/analyzer/api";
+import { TmdbMovie } from "@/lib/tmdb/types";
 
 type AnalysisViewProps = {
   movie: TmdbMovie;

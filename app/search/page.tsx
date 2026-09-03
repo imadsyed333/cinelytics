@@ -1,5 +1,5 @@
 import SearchTitleCard from "@/components/ui/searchtitlecard";
-import { fetchMovies } from "@/lib/api/tmdbapi";
+import { fetchMovies } from "@/lib/tmdb/api";
 import BackButton from "@/components/ui/back-button";
 import PageBackground from "@/components/ui/page-background";
 import SearchBox from "@/components/ui/searchbox";

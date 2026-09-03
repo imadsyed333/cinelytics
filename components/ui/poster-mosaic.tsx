@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { TmdbMovieSearchResult } from "@/lib/types/tmdb";
+import { TmdbMovieSearchResult } from "@/lib/tmdb/types";
 
 type PosterMosaicProps = {
   titles: TmdbMovieSearchResult[];

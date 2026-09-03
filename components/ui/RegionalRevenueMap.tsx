@@ -9,7 +9,7 @@ import {
 import { scaleLinear } from "d3-scale";
 import { bomCountryToIsoNumeric, bomDisplayLabel } from "@/lib/bom/countryIso";
 import geography from "@/lib/bom/countries-110m.json";
-import { BomRegionalRevenue } from "@/lib/types/bom";
+import { BomRegionalRevenue } from "@/lib/bom/types";
 
 const SCALE_MIN = 0;
 const SCALE_MAX = 1_000_000_000;
