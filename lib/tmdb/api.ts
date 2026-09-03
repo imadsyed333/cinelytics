@@ -2,8 +2,8 @@ import {
   tmdbMovieSchema,
   tmdbMovieSearchResultSchema,
   tmdbMovieReviewSchema,
-} from "../schemas/tmdb";
-import { TmdbMovieReview } from "../types/tmdb";
+} from "./schemas";
+import { TmdbMovieReview } from "./types";
 
 export const fetchMovies = async (query: string) => {
   const res = await fetch(
@@ -51,6 +51,32 @@ export const fetchMovie = async (id: string) => {
   const json = await res.json();
 
   const parsed = tmdbMovieSchema.safeParse(json);
+
+  if (!parsed.success) {
+    console.error(parsed.error);
+    throw new Error("Invalid TMDB API response");
+  }
+
+  return parsed.data;
+};
+
+export const fetchTrendingMovies = async () => {
+  const res = await fetch(`${process.env.API_URL}/trending/movie/week`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.API_KEY}`,
+    },
+    cache: "force-cache",
+  });
+
+  if (!res.ok) {
+    throw new Error(`TMDB API error: ${res.status}`);
+  }
+
+  const json = await res.json();
+
+  const parsed = tmdbMovieSearchResultSchema.array().safeParse(json.results);
 
   if (!parsed.success) {
     console.error(parsed.error);

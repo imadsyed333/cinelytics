@@ -1,29 +1,41 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ComposableMap,
   Geographies,
   Geography,
 } from "@vnedyalk0v/react19-simple-maps";
-import { scaleLinear } from "d3-scale";
+import { scaleThreshold } from "d3-scale";
 import { bomCountryToIsoNumeric, bomDisplayLabel } from "@/lib/bom/countryIso";
 import geography from "@/lib/bom/countries-110m.json";
-import { BomRegionalRevenue } from "@/lib/types/bom";
+import { BomRegionalRevenue } from "@/lib/bom/types";
 
-const SCALE_MIN = 0;
-const SCALE_MAX = 1_000_000_000;
+const SCALE_BREAKS = [25_000_000, 100_000_000, 250_000_000, 500_000_000] as const;
+const SCALE_LABELS = ["$0", "$25M", "$100M", "$250M", "$500M+"] as const;
 
 /** Fallbacks matching :root in globals.css if CSS vars are unavailable. */
+const FALLBACK_REVENUE = [
+  "oklch(0.82 0.08 200)",
+  "oklch(0.70 0.12 220)",
+  "oklch(0.58 0.14 240)",
+  "oklch(0.46 0.16 255)",
+  "oklch(0.32 0.16 264)",
+];
+
 const FALLBACK_COLORS = {
   empty: "oklch(0.96 0.015 240)",
-  low: "oklch(0.65 0.1 250)",
-  high: "oklch(0.35 0.12 264)",
+  revenue: FALLBACK_REVENUE,
   stroke: "oklch(0.7 0.04 250)",
   hoverEmpty: "oklch(0.9 0.04 250)",
 };
 
-type MapColors = typeof FALLBACK_COLORS;
+type MapColors = {
+  empty: string;
+  revenue: string[];
+  stroke: string;
+  hoverEmpty: string;
+};
 
 type RegionalRevenueMapProps = {
   data: BomRegionalRevenue[];
@@ -45,7 +57,7 @@ const formatRevenue = (revenue: number) =>
 const geoId = (geography: { id?: string | number }): string =>
   String(geography.id ?? "");
 
-/** Resolve a CSS color (including oklch vars) to rgb() for d3 interpolation. */
+/** Resolve a CSS color (including oklch vars) to rgb() for SVG fills. */
 const resolveCssColor = (value: string, fallback: string): string => {
   if (typeof document === "undefined") return fallback;
   const el = document.createElement("span");
@@ -61,17 +73,19 @@ const readThemeMapColors = (): MapColors => {
 
   const styles = getComputedStyle(document.documentElement);
   const muted = styles.getPropertyValue("--muted").trim();
-  const ring = styles.getPropertyValue("--ring").trim();
-  const primary = styles.getPropertyValue("--primary").trim();
   const mutedForeground = styles.getPropertyValue("--muted-foreground").trim();
+
+  const revenue = FALLBACK_REVENUE.map((fallback, index) => {
+    const token = styles.getPropertyValue(`--map-revenue-${index + 1}`).trim();
+    return resolveCssColor(token || fallback, fallback);
+  });
 
   return {
     empty: resolveCssColor(
       `color-mix(in oklch, ${muted || FALLBACK_COLORS.empty} 35%, white)`,
       FALLBACK_COLORS.empty,
     ),
-    low: resolveCssColor(ring, FALLBACK_COLORS.low),
-    high: resolveCssColor(primary, FALLBACK_COLORS.high),
+    revenue,
     stroke: resolveCssColor(
       `color-mix(in oklch, ${mutedForeground || FALLBACK_COLORS.stroke} 45%, ${muted || FALLBACK_COLORS.empty})`,
       FALLBACK_COLORS.stroke,
@@ -83,18 +97,29 @@ const readThemeMapColors = (): MapColors => {
   };
 };
 
+type TooltipState = {
+  x: number;
+  y: number;
+  label: string;
+  revenue: number | null;
+};
+
 const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
   const [colors, setColors] = useState<MapColors>(FALLBACK_COLORS);
-  const [tooltip, setTooltip] = useState<{
-    x: number;
-    y: number;
-    label: string;
-    revenue: number | null;
-  } | null>(null);
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const pointerMode = useRef<"mouse" | "touch">("mouse");
 
   useEffect(() => {
     setColors(readThemeMapColors());
   }, []);
+
+  useEffect(() => {
+    if (!tooltip || pointerMode.current !== "touch") return;
+
+    const dismiss = () => setTooltip(null);
+    document.addEventListener("touchstart", dismiss);
+    return () => document.removeEventListener("touchstart", dismiss);
+  }, [tooltip]);
 
   const byIso = useMemo(() => {
     const map = new Map<string, TerritoryValue>();
@@ -115,24 +140,33 @@ const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
 
   const colorScale = useMemo(
     () =>
-      scaleLinear<string>()
-        .domain([SCALE_MIN, SCALE_MAX])
-        .range([colors.low, colors.high])
-        .clamp(true),
-    [colors.low, colors.high],
+      scaleThreshold<number, string>()
+        .domain([...SCALE_BREAKS])
+        .range([...colors.revenue]),
+    [colors.revenue],
   );
 
+  const showTooltip = (
+    x: number,
+    y: number,
+    label: string,
+    revenue: number | null,
+  ) => {
+    setTooltip({ x, y, label, revenue });
+  };
+
   return (
-    <div className="relative">
-      <ComposableMap
-        projectionConfig={{ scale: 147 }}
-        width={800}
-        height={420}
-        className="h-auto w-full"
-      >
-        <Geographies geography={geography}>
-          {({ geographies }) =>
-            geographies.map((geo, index) => {
+    <div className="relative flex h-full min-h-0 flex-col">
+      <div className="min-h-0 flex-1 max-h-56 sm:max-h-72 lg:max-h-none">
+        <ComposableMap
+          projectionConfig={{ scale: 147 }}
+          width={800}
+          height={420}
+          className="h-full w-full"
+        >
+          <Geographies geography={geography}>
+            {({ geographies }) =>
+              geographies.map((geo, index) => {
               const id = geoId(geo);
               const value = byIso.get(id);
               const fill = value ? colorScale(value.revenue) : colors.empty;
@@ -145,6 +179,8 @@ const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
                 typeof geo.properties?.name === "string"
                   ? geo.properties.name
                   : key;
+              const label = value?.label ?? countryName;
+              const revenue = value?.revenue ?? null;
 
               return (
                 <Geography
@@ -162,30 +198,49 @@ const RegionalRevenueMap = ({ data }: RegionalRevenueMapProps) => {
                     pressed: { fill, outline: "none" },
                   }}
                   onMouseEnter={(event) => {
-                    setTooltip({
-                      x: event.clientX,
-                      y: event.clientY,
-                      label: value?.label ?? countryName,
-                      revenue: value?.revenue ?? null,
-                    });
+                    if (pointerMode.current === "touch") return;
+                    showTooltip(event.clientX, event.clientY, label, revenue);
                   }}
-                  onMouseLeave={() => setTooltip(null)}
+                  onMouseLeave={() => {
+                    if (pointerMode.current === "touch") return;
+                    setTooltip(null);
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    showTooltip(event.clientX, event.clientY, label, revenue);
+                  }}
+                  onTouchStart={(event) => {
+                    pointerMode.current = "touch";
+                    event.stopPropagation();
+                    const touch = event.touches[0];
+                    if (!touch) return;
+                    showTooltip(touch.clientX, touch.clientY, label, revenue);
+                  }}
                 />
               );
             })
           }
         </Geographies>
       </ComposableMap>
+      </div>
 
-      <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
-        <span>{formatRevenue(SCALE_MIN)}</span>
-        <div
-          className="h-2 flex-1 rounded-full"
-          style={{
-            background: `linear-gradient(to right, ${colors.low}, ${colors.high})`,
-          }}
-        />
-        <span>{formatRevenue(SCALE_MAX)}</span>
+      <div className="mt-2 flex shrink-0 flex-col gap-1 text-xs text-muted-foreground">
+        <div className="flex overflow-hidden rounded-full">
+          {colors.revenue.map((fill, index) => (
+            <div
+              key={SCALE_LABELS[index]}
+              className="h-2 flex-1"
+              style={{ background: fill }}
+            />
+          ))}
+        </div>
+        <div className="flex">
+          {SCALE_LABELS.map((label) => (
+            <span key={label} className="flex-1 text-center first:text-left last:text-right">
+              {label}
+            </span>
+          ))}
+        </div>
       </div>
 
       {tooltip && (

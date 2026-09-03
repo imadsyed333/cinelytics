@@ -1,17 +1,18 @@
-import { AnalyzerResponse } from "../types/analyzer";
-import { BomRegionalRevenue } from "../types/bom";
-import { TmdbMovie } from "../types/tmdb";
-import { fetchReviews } from "./tmdbapi";
-import { fetchRegionalRevenue } from "./bom";
-import { runReviewChain, runAnalysisChain } from "../analyzer/chains";
+import { unstable_cache } from "next/cache";
+import { AnalyzerResponse } from "./types";
+import { BomRegionalRevenue } from "../bom/types";
+import { TmdbMovie } from "../tmdb/types";
+import { fetchReviews } from "../tmdb/api";
+import { fetchRegionalRevenue } from "../bom/api";
+import { runReviewChain, runAnalysisChain } from "./chains";
 import {
   stringifyReviews,
   stringifyRegionalRevenue,
   describePerformance,
   systemPrompt,
-} from "../analyzer/utils";
+} from "./utils";
 
-export const fetchAnalysis = async (
+const generateAnalysis = async (
   movie: TmdbMovie,
 ): Promise<AnalyzerResponse> => {
   const [reviews, regionalRows] = await Promise.all([
@@ -42,3 +43,15 @@ export const fetchAnalysis = async (
     regionalRevenue,
   });
 };
+
+export const fetchAnalysis = (
+  movie: TmdbMovie,
+): Promise<AnalyzerResponse> =>
+  unstable_cache(
+    () => generateAnalysis(movie),
+    ["analysis", String(movie.id)],
+    {
+      revalidate: false,
+      tags: ["analysis", `analysis-${movie.id}`],
+    },
+  )();

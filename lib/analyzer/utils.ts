@@ -1,5 +1,5 @@
-import { BomRegionalRevenue } from "../types/bom";
-import { TmdbMovieReview } from "../types/tmdb";
+import { BomRegionalRevenue } from "../bom/types";
+import { TmdbMovieReview } from "../tmdb/types";
 
 const TOP_REGIONAL_MARKETS = 15;
 

@@ -3,7 +3,7 @@ import {
   tmdbMovieSchema,
   tmdbMovieSearchResultSchema,
   tmdbMovieReviewSchema,
-} from "../schemas/tmdb";
+} from "./schemas";
 
 export type TmdbMovie = z.infer<typeof tmdbMovieSchema>;
 
