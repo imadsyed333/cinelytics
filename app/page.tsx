@@ -1,24 +1,11 @@
 import SearchBox from "@/components/search/searchbox";
-import PageBackground from "@/components/layout/page-background";
-import PosterMosaic from "@/components/search/poster-mosaic";
-import { fetchTrendingMovies } from "@/lib/tmdb/api";
-import { TmdbMovieSearchResult } from "@/lib/tmdb/types";
+import { Video } from "lucide-react";
 
-export default async function Home() {
-  let trending: TmdbMovieSearchResult[] = [];
-
-  try {
-    trending = await fetchTrendingMovies();
-  } catch (error) {
-    console.error("Failed to fetch trending movies:", error);
-  }
-
+export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      <PosterMosaic titles={trending} />
-      <PageBackground className="z-[1]" />
-
-      <main className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-4 py-14 text-center">
+    <div className="relative min-h-screen text-foreground">
+      <main className="relative mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-4 py-14 text-center">
+        <Video className="mb-4 size-14 text-white sm:size-16" strokeWidth={1.5} />
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           Cinelytics
         </h1>

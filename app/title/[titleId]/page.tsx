@@ -8,7 +8,6 @@ import { TmdbMovie } from "@/lib/tmdb/types";
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import Image from "next/image";
-import PageBackground from "@/components/layout/page-background";
 
 const formatRuntime = (minutes?: number) => {
   if (!minutes) return null;
@@ -39,9 +38,7 @@ const MoviePage = async ({
   const meta = movieMetaLine(movie);
 
   return (
-    <div className="min-h-svh bg-background text-foreground lg:h-svh lg:overflow-hidden">
-      <PageBackground />
-
+    <div className="min-h-svh text-foreground lg:h-svh lg:overflow-hidden">
       <div className="mx-auto flex min-h-svh max-w-7xl flex-col px-4 py-4 lg:h-svh lg:py-5">
         <header className="flex shrink-0 items-start gap-3 sm:items-center sm:gap-4">
           <BackButton />
