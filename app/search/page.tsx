@@ -1,8 +1,8 @@
-import SearchTitleCard from "@/components/ui/searchtitlecard";
+import SearchTitleCard from "@/components/search/searchtitlecard";
 import { fetchMovies } from "@/lib/tmdb/api";
-import BackButton from "@/components/ui/back-button";
-import PageBackground from "@/components/ui/page-background";
-import SearchBox from "@/components/ui/searchbox";
+import BackButton from "@/components/layout/back-button";
+import PageBackground from "@/components/layout/page-background";
+import SearchBox from "@/components/search/searchbox";
 
 const SearchResultsPage = async ({
   searchParams,

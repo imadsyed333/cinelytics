@@ -1,6 +1,6 @@
-import SearchBox from "@/components/ui/searchbox";
-import PageBackground from "@/components/ui/page-background";
-import PosterMosaic from "@/components/ui/poster-mosaic";
+import SearchBox from "@/components/search/searchbox";
+import PageBackground from "@/components/layout/page-background";
+import PosterMosaic from "@/components/search/poster-mosaic";
 import { fetchTrendingMovies } from "@/lib/tmdb/api";
 import { TmdbMovieSearchResult } from "@/lib/tmdb/types";
 

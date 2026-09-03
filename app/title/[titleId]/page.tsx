@@ -1,14 +1,14 @@
-import AnalysisView from "@/components/ui/AnalysisView";
-import BackButton from "@/components/ui/back-button";
-import MovieStats from "@/components/ui/movie-stats";
-import OverviewText from "@/components/ui/overview-text";
-import RegionalRevenueView from "@/components/ui/RegionalRevenueView";
+import AnalysisView from "@/components/title/AnalysisView";
+import BackButton from "@/components/layout/back-button";
+import MovieStats from "@/components/title/movie-stats";
+import OverviewText from "@/components/title/overview-text";
+import RegionalRevenueView from "@/components/title/RegionalRevenueView";
 import { fetchMovie } from "@/lib/tmdb/api";
 import { TmdbMovie } from "@/lib/tmdb/types";
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import Image from "next/image";
-import PageBackground from "@/components/ui/page-background";
+import PageBackground from "@/components/layout/page-background";
 
 const formatRuntime = (minutes?: number) => {
   if (!minutes) return null;

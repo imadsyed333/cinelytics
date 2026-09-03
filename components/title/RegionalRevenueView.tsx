@@ -1,4 +1,4 @@
-import RegionalRevenueMap from "@/components/ui/RegionalRevenueMap";
+import RegionalRevenueMap from "@/components/title/RegionalRevenueMap";
 import { fetchRegionalRevenue } from "@/lib/bom/api";
 import { BomRegionalRevenue } from "@/lib/bom/types";
 

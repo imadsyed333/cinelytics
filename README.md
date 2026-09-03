@@ -30,9 +30,11 @@ Instead of only showing raw movie stats, it helps users quickly understand how a
   - `page.tsx`: Landing page with search.
   - `search/page.tsx`: Search result listing.
   - `title/[titleId]/page.tsx`: Movie detail + analysis view.
-- `components/ui/`
-  - UI primitives and movie-specific UI components.
-  - `AnalysisView.tsx`: Displays Kowalski's response.
+- `components/`
+  - `ui/`: Shared primitives (button, form, label).
+  - `layout/`: Page chrome used across routes (background, back button).
+  - `search/`: Discovery UI (search box, result cards, poster mosaic).
+  - `title/`: Movie detail UI (stats, overview, analysis, regional revenue).
 - `lib/tmdb/`
   - `api.ts`: TMDB requests for search, single-movie fetch, and reviews.
   - `schemas.ts` / `types.ts`: Zod schemas and inferred TMDB types.
