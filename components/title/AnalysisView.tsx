@@ -54,7 +54,7 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
     };
   });
   return (
-    <section className="min-h-full rounded-2xl border border-border/60 bg-card/70 p-4">
+    <section className="h-full min-h-0 flex-1 overflow-y-auto rounded-2xl border border-border/60 bg-card/70 p-4">
       <div className="divide-y divide-border/50 text-sm">
         <div className="space-y-2 pb-4">
           <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">

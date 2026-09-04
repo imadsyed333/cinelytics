@@ -26,13 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="lg:h-svh">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark lg:overflow-hidden`}
       >
         <IconPatternBackground />
-        <div className="relative z-10 flex min-h-svh flex-col">
-          <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <div className="relative z-10 flex min-h-svh flex-col lg:h-svh lg:overflow-hidden">
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+            {children}
+          </div>
           <TmdbAttribution />
           <Analytics />
         </div>
