@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import IconPatternBackground from "@/components/layout/icon-pattern-background";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
         <IconPatternBackground />
-        <div className="relative z-10">{children}</div>
+        <div className="relative z-10">
+          {children}
+          <Analytics />
+        </div>
       </body>
     </html>
   );
