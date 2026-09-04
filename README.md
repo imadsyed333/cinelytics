@@ -9,7 +9,7 @@ Instead of only showing raw movie stats, it helps users quickly understand how a
 
 <img width="1917" height="987" alt="image" src="https://github.com/user-attachments/assets/eb0f109a-6e84-4fde-890f-19b865eb4f11" />
 
-
+(Screenshots from build based on `main-ollama` branch)
 
 ## What the App Does
 
