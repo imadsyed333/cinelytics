@@ -1,5 +1,5 @@
-import { fetchAnalysis } from "@/lib/api/analyzer";
-import { TmdbMovie } from "@/lib/types/tmdb";
+import { fetchAnalysis } from "@/lib/analyzer/api";
+import { TmdbMovie } from "@/lib/tmdb/types";
 
 type AnalysisViewProps = {
   movie: TmdbMovie;
@@ -29,7 +29,7 @@ const renderParagraphs = (value: string, className = "") => {
   return paragraphs.map((paragraph, index) => (
     <p
       key={`${paragraph.slice(0, 24)}-${index}`}
-      className={`leading-relaxed text-foreground/90 ${className}`.trim()}
+      className={`text-sm leading-relaxed text-foreground/90 ${className}`.trim()}
     >
       {paragraph}
     </p>
@@ -54,9 +54,9 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
     };
   });
   return (
-    <section className="rounded-2xl border border-border/60 bg-card/70 p-5">
-      <div className="divide-y divide-border/50">
-        <div className="space-y-3 pb-5">
+    <section className="min-h-full rounded-2xl border border-border/60 bg-card/70 p-4">
+      <div className="divide-y divide-border/50 text-sm">
+        <div className="space-y-2 pb-4">
           <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
             Performance Summary
           </h3>
@@ -68,11 +68,11 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
         </div>
 
         {reasons.length > 0 && (
-          <div className="space-y-3 py-5">
+          <div className="space-y-2 py-4">
             <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
               Reasons
             </h3>
-            <ol className="space-y-3 pl-5 marker:text-muted-foreground list-decimal">
+            <ol className="list-decimal space-y-2 pl-5 marker:text-muted-foreground">
               {reasons.map((reason, index) => {
                 const cleanedReason = cleanReason(reason);
                 return (
@@ -88,7 +88,7 @@ const AnalysisView = async ({ movie }: AnalysisViewProps) => {
         )}
 
         {normalizeText(final_thoughts) && (
-          <div className="space-y-3 pt-5">
+          <div className="space-y-2 pt-4">
             <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
               Final Thoughts
             </h3>

@@ -27,6 +27,9 @@ export const tmdbMovieSearchResultSchema = z.object({
   title: z.string(),
   release_date: z.string(),
   poster_path: z.string().nullable(),
+  backdrop_path: z.string().nullable().optional(),
+  overview: z.string(),
+  vote_average: z.number(),
 });
 
 export const tmdbMovieReviewSchema = z.object({
