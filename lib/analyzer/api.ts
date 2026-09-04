@@ -9,7 +9,6 @@ import {
   stringifyReviews,
   stringifyRegionalRevenue,
   describePerformance,
-  systemPrompt,
 } from "./utils";
 
 const generateAnalysis = async (
@@ -19,9 +18,9 @@ const generateAnalysis = async (
     fetchReviews(movie.id),
     movie.imdb_id
       ? fetchRegionalRevenue(movie.imdb_id).catch((err) => {
-          console.error("Failed to fetch regional revenue for analysis:", err);
-          return [] as BomRegionalRevenue[];
-        })
+        console.error("Failed to fetch regional revenue for analysis:", err);
+        return [] as BomRegionalRevenue[];
+      })
       : Promise.resolve([] as BomRegionalRevenue[]),
   ]);
   const reviewsStr = stringifyReviews(reviews);
@@ -31,7 +30,6 @@ const generateAnalysis = async (
   const sentiment = await runReviewChain(reviewsStr);
 
   return runAnalysisChain({
-    systemPrompt,
     title: movie.title,
     release_date: movie.release_date,
     budget: movie.budget,
@@ -47,11 +45,4 @@ const generateAnalysis = async (
 export const fetchAnalysis = (
   movie: TmdbMovie,
 ): Promise<AnalyzerResponse> =>
-  unstable_cache(
-    () => generateAnalysis(movie),
-    ["analysis", String(movie.id)],
-    {
-      revalidate: false,
-      tags: ["analysis", `analysis-${movie.id}`],
-    },
-  )();
+  generateAnalysis(movie)
