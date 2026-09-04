@@ -32,7 +32,6 @@ export async function runAnalysisChain(params: {
   overview: string;
   performance: string;
   sentiment: string;
-  regionalRevenue: string;
 }): Promise<AnalyzerResponse> {
   const jsonSchema = {
     type: "object",
@@ -44,14 +43,9 @@ export async function runAnalysisChain(params: {
     required: ["performance_summary", "reasons", "final_thoughts"],
   };
 
-  const regionalBlock = params.regionalRevenue
-    ? `${params.regionalRevenue}\n\n`
-    : "";
-
   const prompt =
     `The movie ${params.title} (${params.release_date}) had a budget of $${params.budget}, ` +
     `generated $${params.revenue} in revenue, and received a rating of ${params.rating}/10.\n` +
-    regionalBlock +
     `Here's a brief overview of the movie: ${params.overview}\n\n` +
     `${params.sentiment}\n\n` +
     `Based on this information, provide specific reasons to explain why the movie ${params.performance} at the box office.\n\n` +

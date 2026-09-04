@@ -34,14 +34,10 @@ Instead of only showing raw movie stats, it helps users quickly understand how a
   - `ui/`: Shared primitives (button, form, label).
   - `layout/`: Page chrome used across routes (background, back button).
   - `search/`: Discovery UI (search box, result cards, poster mosaic).
-  - `title/`: Movie detail UI (stats, overview, analysis, regional revenue).
+  - `title/`: Movie detail UI (stats, overview, analysis).
 - `lib/tmdb/`
   - `api.ts`: TMDB requests for search, single-movie fetch, and reviews.
   - `schemas.ts` / `types.ts`: Zod schemas and inferred TMDB types.
-- `lib/bom/`
-  - `api.ts`: Box Office Mojo scraping for regional revenue.
-  - `schemas.ts` / `types.ts`: Zod schemas and inferred BOM types.
-  - `countryIso.ts`: Maps BOM territory labels to ISO country codes.
 - `lib/analyzer/`
   - `api.ts`: Orchestrates the full analysis pipeline (fetches reviews, runs LLM chains).
   - `chains.ts`: LLM chains — review sentiment summarization and structured box office analysis.
