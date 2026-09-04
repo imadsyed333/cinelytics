@@ -2,10 +2,9 @@ import AnalysisView from "@/components/title/AnalysisView";
 import BackButton from "@/components/layout/back-button";
 import MovieStats from "@/components/title/movie-stats";
 import OverviewText from "@/components/title/overview-text";
-import RegionalRevenueView from "@/components/title/RegionalRevenueView";
+import ReviewsView from "@/components/title/ReviewsView";
 import { fetchMovie } from "@/lib/tmdb/api";
 import { TmdbMovie } from "@/lib/tmdb/types";
-import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import Image from "next/image";
 
@@ -38,8 +37,8 @@ const MoviePage = async ({
   const meta = movieMetaLine(movie);
 
   return (
-    <div className="min-h-svh text-foreground lg:h-svh lg:overflow-hidden">
-      <div className="mx-auto flex min-h-svh max-w-7xl flex-col px-4 py-4 lg:h-svh lg:py-5">
+    <div className="flex min-h-full flex-1 flex-col text-foreground lg:h-full lg:min-h-0 lg:overflow-hidden">
+      <div className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col px-4 py-4 lg:overflow-hidden lg:py-5">
         <header className="flex shrink-0 items-start gap-3 sm:items-center sm:gap-4">
           <BackButton />
           <div className="min-w-0 flex-1">
@@ -80,13 +79,8 @@ const MoviePage = async ({
           <MovieStats movie={movie} />
         </section>
 
-        <div
-          className={cn(
-            "mt-4 flex flex-1 flex-col gap-4 lg:grid lg:min-h-0 lg:overflow-hidden",
-            movie.imdb_id && "lg:grid-cols-2",
-          )}
-        >
-          <div className="order-2 lg:order-none lg:min-h-0 lg:overflow-y-auto">
+        <div className="mt-4 flex min-h-0 flex-col gap-4 lg:min-h-0 lg:flex-1 lg:flex-row lg:overflow-hidden">
+          <div className="flex min-h-0 flex-col lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden">
             {movie.revenue && movie.budget ? (
               <Suspense
                 fallback={
@@ -98,26 +92,23 @@ const MoviePage = async ({
                 <AnalysisView movie={movie} />
               </Suspense>
             ) : (
-              <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
+              <div className="h-full overflow-y-auto rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
                 Kowalski cannot analysis because budget and/or revenue not
                 available :(
               </div>
             )}
           </div>
-
-          {movie.imdb_id ? (
-            <div className="order-1 lg:order-none lg:min-h-0 lg:overflow-hidden">
-              <Suspense
-                fallback={
-                  <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
-                    Loading regional revenue...
-                  </div>
-                }
-              >
-                <RegionalRevenueView imdbId={movie.imdb_id} />
-              </Suspense>
-            </div>
-          ) : null}
+          <div className="flex min-h-0 flex-col lg:h-full lg:min-h-0 lg:flex-1 lg:overflow-hidden">
+            <Suspense
+              fallback={
+                <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
+                  Loading reviews...
+                </div>
+              }
+            >
+              <ReviewsView movie={movie} />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

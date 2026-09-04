@@ -12,7 +12,7 @@ const SearchResultsPage = async ({
   const titles = query ? await fetchMovies(query) : [];
 
   return (
-    <div className="relative min-h-screen text-foreground">
+    <div className="relative min-h-full text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <header className="mb-7">
           <div className="flex items-start gap-3 sm:items-center sm:gap-4">
