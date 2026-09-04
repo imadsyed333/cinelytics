@@ -1,7 +1,12 @@
 import AnalysisView from "@/components/title/AnalysisView";
+import {
+  AnalysisBriefing,
+  AnalysisError,
+} from "@/components/title/analysis-panel-state";
 import BackButton from "@/components/layout/back-button";
 import MovieStats from "@/components/title/movie-stats";
 import OverviewText from "@/components/title/overview-text";
+import { MapSurvey } from "@/components/title/map-panel-state";
 import RegionalRevenueView from "@/components/title/RegionalRevenueView";
 import { fetchMovie } from "@/lib/tmdb/api";
 import { TmdbMovie } from "@/lib/tmdb/types";
@@ -88,32 +93,17 @@ const MoviePage = async ({
         >
           <div className="order-2 lg:order-none lg:min-h-0 lg:overflow-y-auto">
             {movie.revenue && movie.budget ? (
-              <Suspense
-                fallback={
-                  <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
-                    Kowalski is thinking...
-                  </div>
-                }
-              >
+              <Suspense fallback={<AnalysisBriefing />}>
                 <AnalysisView movie={movie} />
               </Suspense>
             ) : (
-              <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
-                Kowalski cannot analysis because budget and/or revenue not
-                available :(
-              </div>
+              <AnalysisError variant="incomplete" />
             )}
           </div>
 
           {movie.imdb_id ? (
             <div className="order-1 lg:order-none lg:min-h-0 lg:overflow-hidden">
-              <Suspense
-                fallback={
-                  <div className="h-full rounded-2xl border border-border/60 bg-card/60 p-4 text-sm text-muted-foreground">
-                    Loading regional revenue...
-                  </div>
-                }
-              >
+              <Suspense fallback={<MapSurvey />}>
                 <RegionalRevenueView imdbId={movie.imdb_id} />
               </Suspense>
             </div>

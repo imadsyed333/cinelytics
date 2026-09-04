@@ -1,3 +1,4 @@
+import { MapError } from "@/components/title/map-panel-state";
 import RegionalRevenueMap from "@/components/title/RegionalRevenueMap";
 import { fetchRegionalRevenue } from "@/lib/bom/api";
 import { BomRegionalRevenue } from "@/lib/bom/types";
@@ -7,24 +8,16 @@ type RegionalRevenueViewProps = {
 };
 
 const RegionalRevenueView = async ({ imdbId }: RegionalRevenueViewProps) => {
-  const rows: BomRegionalRevenue[] = await fetchRegionalRevenue(imdbId).catch(
-    (err) => {
-      console.error("Failed to fetch regional revenue:", err);
-      return [];
-    },
-  );
+  let rows: BomRegionalRevenue[];
+  try {
+    rows = await fetchRegionalRevenue(imdbId);
+  } catch (err) {
+    console.error("Failed to fetch regional revenue:", err);
+    return <MapError variant="signalLost" />;
+  }
 
   if (rows.length === 0) {
-    return (
-      <section className="flex h-full min-h-0 flex-col rounded-2xl border border-border/60 bg-card/70 p-4">
-        <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">
-          Regional Revenue
-        </h3>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Regional revenue unavailable
-        </p>
-      </section>
-    );
+    return <MapError variant="uncharted" />;
   }
 
   return (

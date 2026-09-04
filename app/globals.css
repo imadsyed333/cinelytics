@@ -45,6 +45,12 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   --animate-icon-scroll: icon-scroll 80s linear infinite;
+  --animate-scan-ring: scan-ring 2.4s ease-out infinite;
+  --animate-ticker-fade: ticker-fade 2.4s ease-in-out;
+  --animate-radar-sweep: radar-sweep 4s linear infinite;
+  --animate-ping-travel: ping-travel 2.8s ease-in-out infinite;
+  --animate-dossier-shimmer: dossier-shimmer 1.8s ease-in-out infinite;
+  --animate-compass-wobble: compass-wobble 1.6s ease-in-out infinite;
 }
 
 :root {
@@ -135,8 +141,82 @@
   }
 }
 
+@keyframes scan-ring {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes ticker-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  14%,
+  82% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes radar-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping-travel {
+  0%,
+  100% {
+    transform: scale(0.55);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.7);
+    opacity: 0.7;
+  }
+}
+
+@keyframes dossier-shimmer {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes compass-wobble {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+  50% {
+    transform: rotate(22deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-icon-scroll {
+  .animate-icon-scroll,
+  .animate-scan-ring,
+  .animate-ticker-fade,
+  .animate-radar-sweep,
+  .animate-ping-travel,
+  .animate-dossier-shimmer,
+  .animate-compass-wobble {
     animation: none;
   }
 }

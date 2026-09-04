@@ -1,3 +1,4 @@
+import { AnalysisError } from "@/components/title/analysis-panel-state";
 import { fetchAnalysis } from "@/lib/analyzer/api";
 import { TmdbMovie } from "@/lib/tmdb/types";
 
@@ -42,17 +43,19 @@ const cleanReason = (reason: string) =>
     .replace(/^\d+[.)]\s+/, "");
 
 const AnalysisView = async ({ movie }: AnalysisViewProps) => {
-  const { performance_summary, reasons, final_thoughts } = await fetchAnalysis(
-    movie,
-  ).catch((err) => {
-    console.error("Failed to fetch analysis:", err);
-    return {
-      performance_summary:
-        "Could not connect to Kowalski. Please try again later.",
-      reasons: [],
-      final_thoughts: "",
-    };
-  });
+  const analysis = await fetchAnalysis(movie)
+    .then((data) => ({ ok: true as const, data }))
+    .catch((err) => {
+      console.error("Failed to fetch analysis:", err);
+      return { ok: false as const };
+    });
+
+  if (!analysis.ok) {
+    return <AnalysisError variant="offline" />;
+  }
+
+  const { performance_summary, reasons, final_thoughts } = analysis.data;
+
   return (
     <section className="min-h-full rounded-2xl border border-border/60 bg-card/70 p-4">
       <div className="divide-y divide-border/50 text-sm">
