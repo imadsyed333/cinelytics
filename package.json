@@ -13,6 +13,7 @@
     "@huggingface/inference": "^4.13.28",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
+    "@vercel/analytics": "^2.0.1",
     "@vnedyalk0v/react19-simple-maps": "^2.0.10",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
