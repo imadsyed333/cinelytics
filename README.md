@@ -1,7 +1,15 @@
 # Cinelytics
 
-Cinelytics is a movie intelligence app that combines TMDB data with an AI analyst named Kowalski.
+Cinelytics is a movie intelligence app that combines TMDB + Box Office Mojo data with an AI analyst named Kowalski.
 Instead of only showing raw movie stats, it helps users quickly understand how a title performed and why.
+
+<img width="1917" height="995" alt="image" src="https://github.com/user-attachments/assets/b234121b-bc7b-4423-800b-52b73012f2b2" />
+
+<img width="1917" height="1002" alt="image" src="https://github.com/user-attachments/assets/981da23a-d0e4-45c1-a7f7-a76fd892436e" />
+
+<img width="1917" height="987" alt="image" src="https://github.com/user-attachments/assets/eb0f109a-6e84-4fde-890f-19b865eb4f11" />
+
+
 
 ## What the App Does
 
