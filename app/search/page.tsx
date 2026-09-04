@@ -1,7 +1,6 @@
 import SearchTitleCard from "@/components/search/searchtitlecard";
 import { fetchMovies } from "@/lib/tmdb/api";
 import BackButton from "@/components/layout/back-button";
-import PageBackground from "@/components/layout/page-background";
 import SearchBox from "@/components/search/searchbox";
 
 const SearchResultsPage = async ({
@@ -13,9 +12,7 @@ const SearchResultsPage = async ({
   const titles = query ? await fetchMovies(query) : [];
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      <PageBackground />
-
+    <div className="relative min-h-screen text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <header className="mb-7">
           <div className="flex items-start gap-3 sm:items-center sm:gap-4">
